@@ -1,8 +1,14 @@
 plugins {
+
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }
 //어플리케이션 실행에 필요한 모든 의존성을 포함하지 않고 클래스파일과 리소스 파일만 포함
+//jar : 클래스파일과 리소스 파일 포함
+//bootjar: 어플리케이션 실행에 필요한 모든 의존성을 함께 빌드함
+
 tasks.jar { enabled = true }
 tasks.bootJar { enabled = false }

@@ -3,9 +3,7 @@ plugins {
 
 dependencies {
     implementation project(path: ':module-core')
-}
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-//어플리케이션 실행에 필요한 모든 의존성을 포함하지 않고 클래스파일과 리소스 파일만 포함
-//web 모듈을 추가하면서 bootJar를 사용하지 않는다.
-tasks.jar { enabled = true }
-tasks.bootJar { enabled = false }
+
+}
