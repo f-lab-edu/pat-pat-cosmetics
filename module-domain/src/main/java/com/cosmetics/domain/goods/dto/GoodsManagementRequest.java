@@ -95,7 +95,7 @@ public class GoodsManagementRequest {
                 .map(GoodsItemManagement::new).collect(Collectors.toList());
     }
 
-    public GoodsManagement toServiceDto() {
+    public GoodsManagement toDto() {
         return GoodsManagement.builder()
                 .goodsNo(goodsNo)
                 .goodsNm(goodsNm)

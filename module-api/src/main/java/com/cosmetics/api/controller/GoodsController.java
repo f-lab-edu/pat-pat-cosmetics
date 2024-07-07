@@ -25,55 +25,46 @@ public class GoodsController {
 
     @GetMapping(value = "/{goodsNo}")
     public CompletableFuture<GoodsManagementResponse> findGoods(@PathVariable Long goodsNo) {
-
-        CompletableFuture<GoodsManagementResponse> goodsResponseFuture = CompletableFuture.supplyAsync(() -> {
-            log.error("findGoodsThread = {}", Thread.currentThread().getName());
-            GoodsManagement goodsManagement = goodsService.findByGoodsNo(goodsNo);
-            return GoodsManagementResponse.toResponseDto(goodsManagement);
-
-        }).thenApplyAsync( //callback
+        return goodsService.findByGoodsNo(goodsNo).thenApplyAsync(goodsManagement -> {
+            return GoodsManagementResponse.fromDto(goodsManagement);
+        }).thenApplyAsync(
                 (GoodsManagementResponse response) -> {
                     log.error("findGoods thenApplayAsync= {}", Thread.currentThread().getName());
                     response.updateSuccess("0000", "조회성공");
                     return response;
                 }
         );
-
-        return goodsResponseFuture;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CompletableFuture<GoodsManagementResponse> registerGoods(@RequestBody @Valid GoodsManagementRequest goodsManagementRequest) throws ExecutionException, InterruptedException {
-
-        CompletableFuture<GoodsManagementResponse> goodsResponseFuture = CompletableFuture.supplyAsync(() -> {
-            log.error("goodsName = {}, registerGoodsThread = {}", goodsManagementRequest.getGoodsNm(), Thread.currentThread().getName()); //ForkJoinPool.commonPool-worker-1
-            return goodsService.save(goodsManagementRequest.toServiceDto()); //등록
-
-        }).thenApplyAsync(
-                //dto ->
+        CompletableFuture<GoodsManagementResponse>  goodsResponseFuture = goodsService.save(goodsManagementRequest.toDto()).thenApplyAsync(
                 (goodsManagement) -> {
-                    log.error("goodsName = {}, goodsNo = {}", goodsManagementRequest.getGoodsNm(), goodsManagement.getGoodsNo());
+                    log.error("saveAfter goodsName = {}, goodsNo = {}", goodsManagement.getGoodsNm(), goodsManagement.getGoodsNo());
                     log.error("registerGoodsThread thenApplyAsync = {}", Thread.currentThread().getName()); //ForkJoinPool.commonPool-worker-1
-                    GoodsManagementResponse response = GoodsManagementResponse.toResponseDto(goodsManagement);
+                    GoodsManagementResponse response = GoodsManagementResponse.fromDto(goodsManagement);
                     response.updateSuccess("0000", "등록성공");
                     return response;
                 }
+        ).thenApplyAsync(
+                (response) ->  {
+                    if("0000".equals(response.getResultCode())){
+                        smsService.smsMessage(response.getGoodsNo()); //Cosmetics-Thread-Pool1
+                    }
+                    return response;
+                }
         );
-
-        //등록에 성공하면 메세지를 보낸다고 가정
-        if ("0000".equals(goodsResponseFuture.get().getResultCode())) {
-            smsService.smsMessage(goodsResponseFuture.get().getGoodsNo()); //Cosmetics-Thread-Pool1
-        }
         return goodsResponseFuture;
     }
+
 
     @DeleteMapping(value = "/{goodsNo}")
     public GoodsManagementResponse deleteGoods(@PathVariable Long goodsNo) {
         log.error("deleteGoods : {}", goodsNo);
         GoodsManagement goodsManagement = goodsService.deleteByGoodsNo(goodsNo);
         //dto -> responseDto
-        GoodsManagementResponse responseGoodsManagement = GoodsManagementResponse.toResponseDto(goodsManagement);
+        GoodsManagementResponse responseGoodsManagement = GoodsManagementResponse.fromDto(goodsManagement);
         responseGoodsManagement.updateSuccess("0000", "삭제성공");
         return responseGoodsManagement;
     }

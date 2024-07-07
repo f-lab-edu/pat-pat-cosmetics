@@ -1,6 +1,9 @@
 package com.cosmetics.config;
 
+import com.cosmetics.api.exception.handler.CosmeticsAsyncExceptionHandler;
+import com.cosmetics.api.exception.handler.CosmeticsExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -29,5 +32,9 @@ public class AsyncConfig implements AsyncConfigurer {
         return executor;
         //상황에 따라 최소 스레드 수 최대 스레드 수 대기 큐의 크기를 조절해야하는데 그 상황이 어떤 상황에 따라 어떤 걸 보고 어떻게 지정해야할 지
         //궁금합니다
+    }
+    @Override
+    public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
+        return new CosmeticsAsyncExceptionHandler();
     }
 }

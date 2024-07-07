@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GoodsManagementResponse extends ResponseDto {
-
     private Long goodsNo;
     private String category;
     private String goodsNm;
@@ -65,7 +64,7 @@ public class GoodsManagementResponse extends ResponseDto {
         this.addImage = addImage;
     }
 
-    public static GoodsManagementResponse toResponseDto(GoodsManagement goodsManagent) {
+    public static GoodsManagementResponse fromDto(GoodsManagement goodsManagent) {
         return GoodsManagementResponse.builder()
                 .goodsNo(goodsManagent.getGoodsNo())
                 .category(goodsManagent.getCategory())

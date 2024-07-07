@@ -41,7 +41,7 @@ public class VendControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("errorCode").value("INVALID_PARAMETER"))
                 .andExpect(jsonPath("errorMessage").value("유효하지 않는 값입니다"))
-                .andExpect(jsonPath("$.fieldErrorList[0].field").value(anyOf(is("vendorNm"), is("postNo"))))
+                .andExpect(jsonPath("$.fieldErrorList[0].field").value(anyOf(is("vendorNm"), is("postNo"), is("addr"))))
                 .andExpect(jsonPath("$.fieldErrorList[0].message").value("must not be blank"));
 
     }

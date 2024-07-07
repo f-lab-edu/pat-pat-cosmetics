@@ -69,7 +69,7 @@ public class GoodsManagement {
         this.addImage = addImage;
     }
 
-    public static GoodsManagement toDto(GoodsManagementEntity goodsManagementEntity) {
+    public static GoodsManagement fromEntity(GoodsManagementEntity goodsManagementEntity) {
         return GoodsManagement.builder()
                 .goodsNo(goodsManagementEntity.getGoodsNo())
                 .goodsNm(goodsManagementEntity.getGoodsNm())

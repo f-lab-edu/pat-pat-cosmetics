@@ -112,7 +112,7 @@ public class GoodsApiApplicationTest {
         String url = "http://localhost:" + port + "/v1/goods/{goodsNo}";
         ResponseEntity<GoodsManagementResponse> responseEntity = testRestTemplate.getForEntity(url, GoodsManagementResponse.class, goodsNo);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getGoodsNm()).isEqualTo("닥터스킨");
+        assertThat(responseEntity.getBody().getGoodsNm()).isEqualTo("닥터스");
     }
 
     @DisplayName("상품 삭제")

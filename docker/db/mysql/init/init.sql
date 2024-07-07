@@ -73,13 +73,6 @@ select * from pv_goods;
 select * from pv_item;
 select * from pv_goods where goods_no =1;
 
-select * from od_order;
-select * from od_order_dtl;
-select * from od_order_deli;
-select * from od_order_pay;
-select * from od_order_goods;
-select * from od_order_bene;
-
 /* 주문자 관리 기본 정보 마스터 */
 CREATE TABLE IF NOT EXISTS od_order(
     order_no INT(11) NOT NULL AUTO_INCREMENT,
@@ -89,14 +82,14 @@ CREATE TABLE IF NOT EXISTS od_order(
     cell_no VARCHAR(30) NOT NULL,
     insert_dtime DATETIME DEFAULT now(),
     update_dtime DATETIME DEFAULT now(),
-    CONSTRAINT od_ord_master_pk PRIMARY KEY(order_no),
+    CONSTRAINT od_ord_master_pk PRIMARY KEY(order_no)
 );
 
 /* 상품단위 주문 정보 */
 CREATE TABLE IF NOT EXISTS od_order_dtl(
     order_no INT(11) NOT NULL AUTO_INCREMENT,
-    order_step INT(11) NOT NULL AUTO_INCREMENT,  /* 단계 주문/취소/반품/ */
-    order_status /*주문상태 결제대기 결제중 */
+    order_step VARCHAR(4) NOT NULL,  /* 단계 주문/취소/반품/ */
+    order_status VARCHAR(4) NOT NULL,  /*주문상태 결제대기 결제중 */
     goods_no INT(11) NOT NULL,
     goods_nm VARCHAR(30) NOT NULL,
     item_no INT(11) NOT NULL,
@@ -113,8 +106,15 @@ CREATE TABLE IF NOT EXISTS od_order_dtl(
     CONSTRAINT od_order_dtl_pk PRIMARY KEY(order_no),
     foreign key (order_no) references od_order(order_no)
 );
-
+/*
+select * from od_order;
+select * from od_order_dtl;
+select * from od_order_deli;
+select * from od_order_pay;
+select * from od_order_goods;
+select * from od_order_bene;
 drop table pv_item;
 drop table pv_goods;commit;
+ */
 select count(*) over(), a.* from pv_goods a ;
 select  a.goods_nm ,b.item_nm,a.* from pv_goods a, pv_item b where a.goods_no = b.goods_no ;
