@@ -16,7 +16,12 @@ services:
       MYSQL_USER : dev_1234
       MYSQL_PASSWORD : 1234
       TZ: Asia/Seoul
+    networks:
+      - mynetwork
 volumes:
   mysql:
 
+networks:
+  mynetwork:
+    driver: bridge
 #test1
